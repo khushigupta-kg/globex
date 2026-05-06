@@ -9,23 +9,27 @@ function App() {
 
   // Fetch country data
   useEffect(() => {
-    fetch("https://restcountries.com/v3.1/all")
-      .then((res) => res.json())
-      .then((data) => {
-        setCountries(data);
+  fetch(
+    "https://restcountries.com/v3.1/all?fields=name,capital,region,languages,flags"
+  )
+    .then((res) => res.json())
+    .then((data) => {
+      setCountries(data);
 
-        // Select random country
-        const randomCountry =
-          data[Math.floor(Math.random() * data.length)];
+      const randomCountry =
+        data[Math.floor(Math.random() * data.length)];
 
-        setCurrentCountry(randomCountry);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.log(error);
-        setLoading(false);
-      });
-  }, []);
+      setCurrentCountry(randomCountry);
+
+      console.log(randomCountry);
+
+      setLoading(false);
+    })
+    .catch((error) => {
+      console.log(error);
+      setLoading(false);
+    });
+}, []);
 
   // Loading state
   if (loading) {
