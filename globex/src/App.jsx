@@ -1,35 +1,32 @@
-// App.jsx
-
 import { useEffect, useState } from "react";
 
 function App() {
   const [countries, setCountries] = useState([]);
   const [currentCountry, setCurrentCountry] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [result, setResult] = useState("");
 
   // Fetch country data
   useEffect(() => {
-  fetch(
-    "https://restcountries.com/v3.1/all?fields=name,capital,region,languages,flags"
-  )
-    .then((res) => res.json())
-    .then((data) => {
-      setCountries(data);
+    fetch(
+      "https://restcountries.com/v3.1/all?fields=name,capital,region,languages,flags"
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        setCountries(data);
 
-      const randomCountry =
-        data[Math.floor(Math.random() * data.length)];
+        const randomCountry =
+          data[Math.floor(Math.random() * data.length)];
 
-      setCurrentCountry(randomCountry);
+        setCurrentCountry(randomCountry);
 
-      console.log(randomCountry);
-
-      setLoading(false);
-    })
-    .catch((error) => {
-      console.log(error);
-      setLoading(false);
-    });
-}, []);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.log(error);
+        setLoading(false);
+      });
+  }, []);
 
   // Loading state
   if (loading) {
@@ -40,9 +37,42 @@ function App() {
     );
   }
 
+  // Generate options
+  const generateOptions = () => {
+    if (!countries.length || !currentCountry) return [];
+
+    // correct answer
+    const options = [currentCountry.name.common];
+
+    // random wrong answers
+    while (options.length < 4) {
+      const randomCountry =
+        countries[Math.floor(Math.random() * countries.length)].name.common;
+
+      // avoid duplicates
+      if (!options.includes(randomCountry)) {
+        options.push(randomCountry);
+      }
+    }
+
+    // shuffle options
+    return options.sort(() => Math.random() - 0.5);
+  };
+
+  const options = generateOptions();
+
+  // Check answer
+  const checkAnswer = (option) => {
+    if (option === currentCountry.name.common) {
+      setResult("✅ Correct!");
+    } else {
+      setResult("❌ Wrong!");
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-black via-slate-900 to-gray-800 text-white flex flex-col items-center p-10">
-      
+
       {/* Title */}
       <h1 className="text-5xl font-bold mb-4">🌍 GlobeX</h1>
 
@@ -74,26 +104,25 @@ function App() {
 
         </div>
 
-        {/* Options Buttons */}
+        {/* Option Buttons */}
         <div className="grid grid-cols-2 gap-4 mt-8">
 
-          <button className="bg-blue-600 hover:bg-blue-700 transition-all p-4 rounded-xl">
-            Option 1
-          </button>
-
-          <button className="bg-blue-600 hover:bg-blue-700 transition-all p-4 rounded-xl">
-            Option 2
-          </button>
-
-          <button className="bg-blue-600 hover:bg-blue-700 transition-all p-4 rounded-xl">
-            Option 3
-          </button>
-
-          <button className="bg-blue-600 hover:bg-blue-700 transition-all p-4 rounded-xl">
-            Option 4
-          </button>
+          {options.map((option, index) => (
+            <button
+              key={index}
+              onClick={() => checkAnswer(option)}
+              className="bg-blue-600 hover:bg-blue-700 transition-all p-4 rounded-xl"
+            >
+              {option}
+            </button>
+          ))}
 
         </div>
+
+        {/* Result */}
+        <p className="text-2xl mt-6 text-center font-semibold">
+          {result}
+        </p>
 
       </div>
     </div>
