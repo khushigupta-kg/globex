@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import Home from "./components/Home";
 
 function App() {
   const [countries, setCountries] = useState([]);
@@ -9,6 +10,7 @@ function App() {
   const [score, setScore] = useState(0);
   const [questionNumber, setQuestionNumber] = useState(1);
   const [gameOver, setGameOver] = useState(false);
+  const [gameStarted, setGameStarted] = useState(false);
 
   // Fetch country data
   useEffect(() => {
@@ -33,6 +35,11 @@ function App() {
   }, []);
 
   // Loading screen
+  if (!gameStarted) {
+  return <Home startGame={() => setGameStarted(true)} />;
+}
+
+  // Loading state
   if (loading) {
     return (
       <div className="h-screen flex items-center justify-center bg-black text-white text-2xl">
