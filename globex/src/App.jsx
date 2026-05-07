@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import Home from "./components/Home";
+import bgVideo from "./assets/space.mp4";
+import resultVideo from "./assets/result.mp4";
 
 function App() {
   const [countries, setCountries] = useState([]);
@@ -36,6 +38,24 @@ function App() {
       });
   }, []);
 
+ 
+  const getFinalMessage = () => {
+    if (score <= 4) {
+      return "😅 Better luck next time!";
+    }
+
+    if (score <= 7) {
+      return "🌍 Good job, Explorer!";
+    }
+
+    if (score <= 9) {
+      return "🔥 Amazing geography skills!";
+    }
+
+    return "🏆 Geography Master!";
+  };
+
+
   if (!gameStarted) {
     return (
       <Home
@@ -56,25 +76,45 @@ function App() {
 
   if (gameOver) {
     return (
-      <div className="h-screen flex flex-col items-center justify-center bg-black text-white">
-        <h1 className="text-5xl font-bold mb-6">
-          🎉 Game Over
-        </h1>
+      <div className="relative h-screen flex flex-col items-center justify-center overflow-hidden text-white">
 
-        <h2 className="text-3xl mb-4">
-          Great Job, {playerName} 👋
-        </h2>
 
-        <p className="text-3xl mb-6">
-          Final Score: {score}/10
-        </p>
-
-        <button
-          onClick={() => window.location.reload()}
-          className="bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-xl text-xl transition-all"
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover"
         >
-          Play Again
-        </button>
+          <source src={resultVideo} type="video/mp4" />
+        </video>
+
+
+        <div className="absolute inset-0 bg-black/60"></div>
+
+
+        <div className="relative z-10 text-center bg-white/10 backdrop-blur-md p-10 rounded-3xl shadow-2xl">
+
+          <h1 className="text-5xl font-bold mb-6">
+            🎉 Game Over
+          </h1>
+
+          <p className="text-3xl mb-6">
+            Final Score: {score}/10
+          </p>
+
+          <p className="text-2xl text-yellow-300 mb-8 font-semibold">
+            {getFinalMessage()}
+          </p>
+
+          <button
+            onClick={() => window.location.reload()}
+            className="bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-xl text-xl transition-all"
+          >
+            Play Again
+          </button>
+
+        </div>
       </div>
     );
   }
@@ -98,6 +138,7 @@ function App() {
 
   const options = generateOptions();
 
+
   const checkAnswer = (option) => {
     if (answered) return;
 
@@ -111,6 +152,7 @@ function App() {
       setCorrectAnswer(currentCountry.name.common);
     }
   };
+
 
   const nextQuestion = () => {
 
@@ -137,78 +179,96 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-black via-slate-900 to-gray-800 text-white flex flex-col items-center p-10">
+    <div className="relative min-h-screen overflow-hidden text-white">
 
-      <h1 className="text-5xl font-bold mb-4">
-        🌍 GlobeX
-      </h1>
 
-      <p className="text-gray-300 mb-6">
-        Guess the country using clues
-      </p>
+      <video
+        autoPlay
+        loop
+        muted
+        playsInline
+        className="absolute inset-0 w-full h-full object-cover"
+      >
+        <source src={bgVideo} type="video/mp4" />
+      </video>
 
-      <div className="flex gap-8 mb-8 text-lg">
-        <p>🎯 Score: {score}</p>
-        <p>❓ Question: {questionNumber}/10</p>
-      </div>
+      <div className="absolute inset-0 bg-black/60"></div>
 
-      <div className="bg-white/10 backdrop-blur-md p-8 rounded-2xl shadow-xl w-full max-w-2xl">
 
-        <div className="space-y-4 text-lg">
+      <div className="relative z-10 flex flex-col items-center w-full p-10">
 
-          <div className="bg-white/10 p-4 rounded-xl">
-            🌍 Region: {currentCountry?.region}
-          </div>
+        <h1 className="text-5xl font-bold mb-4">
+          🌍 GlobeX
+        </h1>
 
-          <div className="bg-white/10 p-4 rounded-xl">
-            🏙 Capital: {currentCountry?.capital?.[0] || "Unknown"}
-          </div>
+        <p className="text-gray-300 mb-6">
+          Guess the country using clues
+        </p>
 
-          <div className="bg-white/10 p-4 rounded-xl">
-            🗣 Language: {
-              currentCountry?.languages
-                ? Object.values(currentCountry.languages)[0]
-                : "Unknown"
-            }
-          </div>
-
+        <div className="flex gap-8 mb-8 text-lg">
+          <p>🎯 Score: {score}</p>
+          <p>❓ Question: {questionNumber}/10</p>
         </div>
 
-        <div className="grid grid-cols-2 gap-4 mt-8">
+        <div className="bg-white/10 backdrop-blur-md p-8 rounded-2xl shadow-xl w-full max-w-2xl">
 
-          {options.map((option, index) => (
-            <button
-              key={index}
-              onClick={() => checkAnswer(option)}
-              disabled={answered}
-              className="bg-blue-600 hover:bg-blue-700 transition-all p-4 rounded-xl disabled:bg-gray-600"
-            >
-              {option}
-            </button>
-          ))}
+          <div className="space-y-4 text-lg">
 
-        </div>
+            <div className="bg-white/10 p-4 rounded-xl">
+              🌍 Region: {currentCountry?.region}
+            </div>
 
-        <div className="text-center mt-6">
+            <div className="bg-white/10 p-4 rounded-xl">
+              🏙 Capital: {currentCountry?.capital?.[0] || "Unknown"}
+            </div>
 
-          <p className="text-2xl font-semibold">
-            {result}
-          </p>
+            <div className="bg-white/10 p-4 rounded-xl">
+              🗣 Language: {
+                currentCountry?.languages
+                  ? Object.values(currentCountry.languages)[0]
+                  : "Unknown"
+              }
+            </div>
 
-          {correctAnswer && (
-            <p className="text-xl text-green-400 mt-2">
-              ✅ Correct Answer: {correctAnswer}
+          </div>
+
+          <div className="grid grid-cols-2 gap-4 mt-8">
+
+            {options.map((option, index) => (
+              <button
+                key={index}
+                onClick={() => checkAnswer(option)}
+                disabled={answered}
+                className="bg-blue-600 hover:bg-blue-700 transition-all p-4 rounded-xl disabled:bg-gray-600"
+              >
+                {option}
+              </button>
+            ))}
+
+          </div>
+
+          <div className="text-center mt-6">
+
+            <p className="text-2xl font-semibold">
+              {result}
             </p>
-          )}
+
+            {correctAnswer && (
+              <p className="text-xl text-green-400 mt-2">
+                ✅ Correct Answer: {correctAnswer}
+              </p>
+            )}
+
+          </div>
+
+          <button
+            onClick={nextQuestion}
+            className="mt-6 w-full bg-green-600 hover:bg-green-700 p-4 rounded-xl text-lg font-semibold transition-all"
+          >
+            Next Question →
+          </button>
 
         </div>
-
-        <button
-          onClick={nextQuestion}
-          className="mt-6 w-full bg-green-600 hover:bg-green-700 p-4 rounded-xl text-lg font-semibold transition-all"
-        >
-          Next Question →
-        </button>
 
       </div>
     </div>
