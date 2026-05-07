@@ -1,10 +1,14 @@
+import bgImage from "../assets/background.jpg";
 function Home({
   startGame,
   playerName,
   setPlayerName,
 }) {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#020617] via-[#0f172a] to-[#1e293b] flex items-center justify-center px-6">
+    <div
+      className="min-h-screen bg-gradient-to-br from-[#020617] via-[#0f172a] to-[#1e293b] flex items-center justify-center px-6"
+      style={{ backgroundImage: `url(${bgImage})`, backgroundSize: "cover" }}
+    >
 
       
       <div className="bg-white/10 backdrop-blur-lg border border-white/20 shadow-2xl rounded-3xl p-10 w-full max-w-2xl text-center">
@@ -42,7 +46,7 @@ function Home({
             disabled={!playerName}
             className="w-full max-w-md bg-blue-600 hover:bg-blue-700 transition-all duration-300 py-4 rounded-2xl text-xl font-semibold text-white shadow-xl hover:scale-105 disabled:opacity-50 disabled:hover:scale-100"
           >
-            ▶ Start Adventure
+            ▶️ Start Adventure
           </button>
 
         </div>
