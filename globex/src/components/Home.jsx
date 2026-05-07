@@ -1,23 +1,54 @@
-
-function Home({ startGame }) {
+function Home({
+  startGame,
+  playerName,
+  setPlayerName,
+}) {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-black via-slate-900 to-gray-800 text-white flex flex-col items-center justify-center px-6">
+    <div className="min-h-screen bg-gradient-to-br from-[#020617] via-[#0f172a] to-[#1e293b] flex items-center justify-center px-6">
 
-      <h1 className="text-7xl font-extrabold mb-4 tracking-wide">
-        🌍 GlobeX
-      </h1>
+      
+      <div className="bg-white/10 backdrop-blur-lg border border-white/20 shadow-2xl rounded-3xl p-10 w-full max-w-2xl text-center">
 
-      <p className="text-xl text-gray-300 mb-10 text-center max-w-xl">
-        Challenge your geography knowledge and guess countries using smart clues.
-      </p>
+       
+        <div className="text-7xl mb-4 animate-pulse">
+          🌍
+        </div>
 
-      <button
-        onClick={startGame}
-        className="bg-blue-600 hover:bg-blue-700 px-10 py-4 rounded-2xl text-2xl font-semibold transition-all shadow-lg hover:scale-105"
-      >
-        ▶ Play Game
-      </button>
+       
+        <h1 className="text-6xl font-extrabold text-white tracking-wide mb-4">
+          GlobeX
+        </h1>
 
+        
+        <p className="text-gray-300 text-lg leading-relaxed mb-10">
+          Explore the world through clues, challenge your geography knowledge,
+          and become the ultimate world explorer.
+        </p>
+
+        
+        <div className="flex flex-col items-center gap-5">
+
+          <input
+            type="text"
+            placeholder="Enter your name..."
+            value={playerName}
+            onChange={(e) => setPlayerName(e.target.value)}
+            className="w-full max-w-md px-6 py-4 rounded-2xl bg-white/20 border border-white/20 text-white placeholder-gray-300 outline-none focus:ring-2 focus:ring-blue-400 text-lg shadow-lg"
+          />
+
+          
+          <button
+            onClick={startGame}
+            disabled={!playerName}
+            className="w-full max-w-md bg-blue-600 hover:bg-blue-700 transition-all duration-300 py-4 rounded-2xl text-xl font-semibold text-white shadow-xl hover:scale-105 disabled:opacity-50 disabled:hover:scale-100"
+          >
+            ▶ Start Adventure
+          </button>
+
+        </div>
+
+
+      </div>
     </div>
   );
 }
